@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:to_do_list/app/data/models/note_model.dart';
+import 'package:to_do_list/app/data/providers/note_provider.dart';
 
 class NoteController extends GetxController {
   final notes = List<Note>.empty().obs;
@@ -21,14 +22,17 @@ class NoteController extends GetxController {
 
   void addNote(String title, String content) {
     if (title != "" && content != "") {
-      final data = Note(
-        id: DateTime.now().toString(),
-        title: title,
-        content: content,
-        createdAt: DateTime.now().toString(),
-      );
-      notes.add(data);
-      Get.back();
+      NoteProvider().postNote(title, content).then((value) {
+        print(value);
+        final data = Note(
+          id: value['name'],
+          title: title,
+          content: content,
+          createdAt: DateTime.now().toString(),
+        );
+        notes.add(data);
+        Get.back();
+      });
     } else {
       Get.snackbar("Warning", "Please fill all the fields");
     }
@@ -39,7 +43,21 @@ class NoteController extends GetxController {
   }
 
   void deleteNote(String id) {
-    notes.removeWhere((element) => element.id == id);
-    Get.snackbar("Success", "Note deleted successfully");
+    NoteProvider().deleteNote(id).then((value) {
+      notes.removeWhere((element) => element.id == id);
+      Get.snackbar("Success", "Note deleted successfully");
+    });
+  }
+
+  void editNote(String id, String title, String content) {
+    NoteProvider().editNote(id, title, content).then((value) {
+      final data = findById(id);
+      data.title = title;
+      data.content = content;
+      notes.refresh();
+      Get.back();
+      Get.back();
+      Get.snackbar("Success", "Note edited successfully");
+    });
   }
 }

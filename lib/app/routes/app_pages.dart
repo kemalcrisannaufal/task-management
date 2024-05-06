@@ -8,6 +8,8 @@ import '../modules/addTask/bindings/add_task_binding.dart';
 import '../modules/addTask/views/add_task_view.dart';
 import '../modules/calendar/bindings/calendar_binding.dart';
 import '../modules/calendar/views/calendar_view.dart';
+import '../modules/editNote/bindings/edit_note_binding.dart';
+import '../modules/editNote/views/edit_note_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/note/bindings/note_binding.dart';
@@ -64,6 +66,11 @@ class AppPages {
       name: _Paths.ADD_NOTE,
       page: () => const AddNoteView(),
       binding: AddNoteBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_NOTE,
+      page: () => const EditNoteView(),
+      binding: EditNoteBinding(),
     ),
   ];
 }

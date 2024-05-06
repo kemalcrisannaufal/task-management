@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:get/get.dart';
+import 'package:to_do_list/app/routes/app_pages.dart';
 import 'package:to_do_list/app/shared/styles/subheading.dart';
 import 'package:to_do_list/app/shared/widget/appbar.dart';
 
@@ -44,6 +45,14 @@ class NoteView extends GetView<NoteController> {
                 ),
               ),
             ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => Get.toNamed(
+                Routes.EDIT_NOTE,
+                arguments: data.id!,
+              ),
+              child: Text("Edit Note"),
+            )
           ],
         ),
       ),

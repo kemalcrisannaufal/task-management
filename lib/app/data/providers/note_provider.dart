@@ -1,22 +1,26 @@
 import 'package:get/get.dart';
 
-import '../models/note_model.dart';
-
 class NoteProvider extends GetConnect {
-  @override
-  void onInit() {
-    httpClient.defaultDecoder = (map) {
-      if (map is Map<String, dynamic>) return Note.fromJson(map);
-      if (map is List) return map.map((item) => Note.fromJson(item)).toList();
-    };
-    httpClient.baseUrl = 'YOUR-API-URL';
-  }
+  String url =
+      "https://task-management-kcr-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
-  Future<Note?> getNote(int id) async {
-    final response = await get('note/$id');
+  Future<dynamic> postNote(String title, String content) async {
+    final response = await post('$url' + '/notes.json', {
+      'title': title,
+      'content': content,
+      'createdAt': DateTime.now().toString(),
+    });
     return response.body;
   }
 
-  Future<Response<Note>> postNote(Note note) async => await post('note', note);
-  Future<Response> deleteNote(int id) async => await delete('note/$id');
+  Future<void> editNote(String id, String title, String content) async {
+    await patch('$url' + '/notes/$id.json', {
+      'title': title,
+      'content': content,
+    });
+  }
+
+  Future<void> deleteNote(String id) async {
+    await delete('$url' + '/notes/$id.json');
+  }
 }

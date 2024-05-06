@@ -11,6 +11,7 @@ abstract class Routes {
   static const PROJECT_DETAIL = _Paths.PROJECT_DETAIL;
   static const NOTE = _Paths.NOTE;
   static const ADD_NOTE = _Paths.ADD_NOTE;
+  static const EDIT_NOTE = _Paths.EDIT_NOTE;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const PROJECT_DETAIL = '/project-detail';
   static const NOTE = '/note';
   static const ADD_NOTE = '/add-note';
+  static const EDIT_NOTE = '/edit-note';
 }
