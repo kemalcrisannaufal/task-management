@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 
 class CalendarController extends GetxController {
-  //TODO: Implement CalendarController
+  Rx<DateTime> selectedDay = DateTime.now().obs;
+  Rx<DateTime> focusedDay = DateTime.now().obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -19,5 +19,8 @@ class CalendarController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  void onDaySelected(DateTime selectDay, DateTime focusDay) {
+    selectedDay.value = selectDay;
+    focusedDay.value = focusDay;
+  }
 }

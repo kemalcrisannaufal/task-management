@@ -31,6 +31,7 @@ class HomeView extends GetView<HomeController> {
                 NavigationMenuView(
                   name: 'Calendar',
                   icon: Icon(Icons.calendar_month_outlined),
+                  onTap: () => Get.toNamed(Routes.CALENDAR),
                 ),
                 SizedBox(width: 10),
                 NavigationMenuView(
