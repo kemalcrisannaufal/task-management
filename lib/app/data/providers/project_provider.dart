@@ -1,24 +1,36 @@
 import 'package:get/get.dart';
 
-import '../models/project_model.dart';
-
 class ProjectProvider extends GetConnect {
-  @override
-  void onInit() {
-    httpClient.defaultDecoder = (map) {
-      if (map is Map<String, dynamic>) return Project.fromJson(map);
-      if (map is List)
-        return map.map((item) => Project.fromJson(item)).toList();
-    };
-    httpClient.baseUrl = 'YOUR-API-URL';
-  }
+  String url =
+      "https://task-management-kcr-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
-  Future<Project?> getProject(int id) async {
-    final response = await get('project/$id');
+  Future<dynamic> postProject(String name, String description) async {
+    final response = await post('$url' + '/projects.json', {
+      'name': name,
+      'description': description,
+      'tasks': [],
+    });
     return response.body;
   }
 
-  Future<Response<Project>> postProject(Project project) async =>
-      await post('project', project);
-  Future<Response> deleteProject(int id) async => await delete('project/$id');
+  Future<dynamic> postTaskProject(
+      String idProject, String name, String dueDate) async {
+    final response = await post('$url' + '/projects/$idProject/tasks.json', {
+      'name': name,
+      'due_date': dueDate,
+      'status': "Incomplete",
+    });
+    return response.body;
+  }
+
+  Future<dynamic> getProjects() async {
+    final response = await get('$url' + '/projects.json');
+    return response.body;
+  }
+
+  Future<void> deleteProject(String id) async =>
+      await delete('$url' + '/projects/$id.json');
+
+  Future<void> deleteTaskProject(String idProject, String idTask) async =>
+      await delete('$url' + '/projects/$idProject/tasks/$idTask.json');
 }

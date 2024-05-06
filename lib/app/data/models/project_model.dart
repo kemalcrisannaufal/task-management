@@ -36,7 +36,7 @@ class Tasks {
   String? dueDate;
   String? status;
 
-  Tasks({this.id, this.name, this.dueDate, this.status});
+  Tasks({this.id, this.name, this.dueDate, this.status = "Incomplete"});
 
   Tasks.fromJson(Map<String, dynamic> json) {
     id = json['id'];
