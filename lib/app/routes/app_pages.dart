@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/addNote/bindings/add_note_binding.dart';
+import '../modules/addNote/views/add_note_view.dart';
 import '../modules/addProject/bindings/add_project_binding.dart';
 import '../modules/addProject/views/add_project_view.dart';
 import '../modules/addTask/bindings/add_task_binding.dart';
@@ -8,6 +10,8 @@ import '../modules/calendar/bindings/calendar_binding.dart';
 import '../modules/calendar/views/calendar_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/note/bindings/note_binding.dart';
+import '../modules/note/views/note_view.dart';
 import '../modules/project/bindings/project_binding.dart';
 import '../modules/project/views/project_view.dart';
 import '../modules/projectDetail/bindings/project_detail_binding.dart';
@@ -50,6 +54,16 @@ class AppPages {
       name: _Paths.PROJECT_DETAIL,
       page: () => const ProjectDetailView(),
       binding: ProjectDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTE,
+      page: () => const NoteView(),
+      binding: NoteBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_NOTE,
+      page: () => const AddNoteView(),
+      binding: AddNoteBinding(),
     ),
   ];
 }

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:to_do_list/app/modules/project/controllers/project_controller.dart';
+import 'package:to_do_list/app/modules/note/controllers/note_controller.dart';
 
 // ignore: must_be_immutable
-class ProjectItemView extends GetView<ProjectController> {
+class NoteItemView extends GetView<NoteController> {
   final id;
   final name;
   Icon icon;
   void Function()? onTap;
 
-  ProjectItemView(
+  NoteItemView(
       {Key? key,
       required this.id,
       required this.name,
@@ -34,7 +34,7 @@ class ProjectItemView extends GetView<ProjectController> {
               child: Text(name),
             ),
             IconButton(
-              onPressed: () => controller.deleteProject(id),
+              onPressed: () => controller.deleteNote(id),
               icon: Icon(Icons.delete),
             ),
           ],
