@@ -33,4 +33,9 @@ class ProjectProvider extends GetConnect {
 
   Future<void> deleteTaskProject(String idProject, String idTask) async =>
       await delete('$url' + '/projects/$idProject/tasks/$idTask.json');
+
+  Future<void> makeTaskComplete(String idProject, String idTask) async =>
+      await patch('$url' + '/projects/$idProject/tasks/$idTask.json', {
+        'status': "Complete",
+      });
 }

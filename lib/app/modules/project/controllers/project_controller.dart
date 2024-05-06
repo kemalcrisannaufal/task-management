@@ -109,10 +109,12 @@ class ProjectController extends GetxController {
   }
 
   void makeTaskComplete(String idProject, String idTask) {
-    final data = findById(idProject)
-        .tasks!
-        .firstWhere((element) => element.id == idTask);
-    data.status = "Complete";
-    projects.refresh();
+    ProjectProvider().makeTaskComplete(idProject, idTask).then((_) {
+      final data = findById(idProject)
+          .tasks!
+          .firstWhere((element) => element.id == idTask);
+      data.status = "Complete";
+      projects.refresh();
+    });
   }
 }
