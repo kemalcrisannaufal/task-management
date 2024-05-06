@@ -52,8 +52,9 @@ class ProjectDetailView extends GetView<ProjectController> {
                     shrinkWrap: true,
                     itemCount: data.tasks!.length,
                     itemBuilder: (context, index) {
+                      int reversedIndex = data.tasks!.length - 1 - index;
                       return ItemTaskView(
-                        data.tasks![index],
+                        data.tasks![reversedIndex],
                       );
                     },
                   )),

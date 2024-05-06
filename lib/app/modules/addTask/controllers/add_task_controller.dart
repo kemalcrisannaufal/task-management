@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 class AddTaskController extends GetxController {
   late TextEditingController name;
   var dueDate = "".obs;
+
   @override
   void onInit() {
     super.onInit();

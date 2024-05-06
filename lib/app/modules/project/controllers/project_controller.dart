@@ -1,17 +1,12 @@
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:to_do_list/app/data/models/project_model.dart';
 
 class ProjectController extends GetxController {
   var projects = List<Project>.empty().obs;
-  late TextEditingController name;
-  late TextEditingController dueDate;
 
   @override
   void onInit() {
     super.onInit();
-    name = TextEditingController();
-    dueDate = TextEditingController();
   }
 
   @override
@@ -21,8 +16,6 @@ class ProjectController extends GetxController {
 
   @override
   void onClose() {
-    name.dispose();
-    dueDate.dispose();
     super.onClose();
   }
 
@@ -31,14 +24,21 @@ class ProjectController extends GetxController {
   }
 
   void addProject(String name, String description) {
-    final data = Project(
-      id: DateTime.now().toString(),
-      name: name,
-      description: description,
-      tasks: [],
-    );
-    projects.add(data);
-    Get.back();
+    if (name != "" && description != "") {
+      final data = Project(
+        id: DateTime.now().toString(),
+        name: name,
+        description: description,
+        tasks: [],
+      );
+      projects.add(data);
+      Get.back();
+    } else {
+      Get.snackbar(
+        "Warning",
+        "Please fill all the fields",
+      );
+    }
   }
 
   void deleteProject(String id) {
@@ -50,15 +50,34 @@ class ProjectController extends GetxController {
   }
 
   void addTaskProject(String id, String name, String dueDate) {
-    print(id);
-    var project = findById(id);
-    var task = Tasks(
-        id: DateTime.now().toString(),
-        name: name,
-        dueDate: dueDate,
-        status: "Incomplete");
-    project.tasks!.add(task);
+    if (name != "" && dueDate != "") {
+      var project = findById(id);
+      var task = Tasks(
+          id: DateTime.now().toString(),
+          name: name,
+          dueDate: dueDate,
+          status: "Incomplete");
+      project.tasks!.add(task);
+      projects.refresh();
+      Get.back();
+    } else {
+      Get.snackbar(
+        "Warning",
+        "Please fill all the fields",
+      );
+    }
+  }
+
+  void deleteTaskProject(String idProject, String idTask) {
+    final project = findById(idProject);
+    project.tasks!.removeWhere((element) => element.id == idTask);
+  }
+
+  void makeTaskComplete(String idProject, String idTask) {
+    final data = findById(idProject)
+        .tasks!
+        .firstWhere((element) => element.id == idTask);
+    data.status = "Complete";
     projects.refresh();
-    Get.back();
   }
 }
