@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
 import 'package:to_do_list/app/data/models/project_model.dart';
-
 import '../../../data/providers/project_provider.dart';
 
 class ProjectController extends GetxController {
   var projects = List<Project>.empty().obs;
+  // var tasksDueToday = List<Tasks>.empty(growable: true).obs;
+  var tasksDueToday = <String, Tasks>{}.obs;
 
   void initData() {
     ProjectProvider().getProjects().then((response) {
@@ -26,11 +27,17 @@ class ProjectController extends GetxController {
                 dueDate: value['due_date'],
                 status: value['status']);
             project.tasks!.add(task);
+
+            if (task.dueDate == DateTime.now().toString().substring(0, 10)) {
+              print(project.id!);
+              tasksDueToday[project.name! + DateTime.now().toString()] = task;
+            }
           });
 
           projects.add(project);
         });
       }
+      print(tasksDueToday.length);
     });
   }
 
@@ -78,6 +85,12 @@ class ProjectController extends GetxController {
     ProjectProvider()
         .deleteProject(id)
         .then((_) => projects.removeWhere((element) => element.id == id));
+
+    for (var i = 0; i < tasksDueToday.length; i++) {
+      if (tasksDueToday.keys.elementAt(i).contains(findById(id).name!)) {
+        tasksDueToday.remove(tasksDueToday.keys.elementAt(i));
+      }
+    }
   }
 
   void addTaskProject(String id, String name, String dueDate) {
@@ -91,6 +104,10 @@ class ProjectController extends GetxController {
             status: "Incomplete");
         project.tasks!.add(task);
         projects.refresh();
+
+        if (task.dueDate == DateTime.now().toString().substring(0, 10)) {
+          tasksDueToday[project.name! + DateTime.now().toString()] = task;
+        }
         Get.back();
       });
     } else {
@@ -105,6 +122,14 @@ class ProjectController extends GetxController {
     ProjectProvider().deleteTaskProject(idProject, idTask).then((value) {
       final project = findById(idProject);
       project.tasks!.removeWhere((element) => element.id == idTask);
+
+      bool status = false;
+      for (var i = 0; i < tasksDueToday.length && !status; i++) {
+        if (tasksDueToday.values.elementAt(i).id == idTask) {
+          tasksDueToday.remove(tasksDueToday.keys.elementAt(i));
+          status = true;
+        }
+      }
     });
   }
 

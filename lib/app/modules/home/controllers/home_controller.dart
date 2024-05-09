@@ -4,7 +4,7 @@ import '../../../data/models/task_model.dart';
 
 class HomeController extends GetxController {
   var tasks = List<Task>.empty().obs;
-  
+
   @override
   void onInit() {
     super.onInit();
@@ -19,6 +19,7 @@ class HomeController extends GetxController {
   void onClose() {
     super.onClose();
   }
+
   Task findById(String id) {
     return tasks.firstWhere((element) => element.id == id);
   }
