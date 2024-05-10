@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:to_do_list/app/data/models/project_model.dart';
+import 'package:to_do_list/app/data/providers/weather_provider.dart';
 import 'package:to_do_list/app/modules/home/views/navigation_menu_view.dart';
 import 'package:to_do_list/app/modules/home/views/project_item_view.dart';
 import 'package:to_do_list/app/modules/home/views/reminder_card_view.dart';
@@ -9,7 +11,10 @@ import 'package:to_do_list/app/modules/note/controllers/note_controller.dart';
 import 'package:to_do_list/app/modules/note/views/note_item_view.dart';
 import 'package:to_do_list/app/modules/project/controllers/project_controller.dart';
 import 'package:to_do_list/app/routes/app_pages.dart';
+import 'package:to_do_list/app/shared/styles/condition_weather_style.dart';
+import 'package:to_do_list/app/shared/styles/subheading.dart';
 import 'package:to_do_list/app/shared/widget/appbar.dart';
+import 'package:to_do_list/app/shared/widget/weather_icon.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -25,6 +30,91 @@ class HomeView extends GetView<HomeController> {
         padding: const EdgeInsets.all(20),
         child: ListView(
           children: [
+            Text("Weather", style: SubHeadingStyle()),
+            SizedBox(height: 10),
+            Container(
+              height: 150,
+              margin: EdgeInsets.only(bottom: 20),
+              color: Colors.white,
+              child: FutureBuilder<Map<String, dynamic>>(
+                future: WeatherProvider().fetchWeather("Korpri Jatinangor"),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text("Error: ${snapshot.error}"),
+                    );
+                  } else {
+                    Map<String, dynamic> data = snapshot.data!;
+
+                    return Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          WeatherIconWidget(
+                              iconUrl: data["current"]["condition"]["icon"]),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  data['location']['name'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Row(
+                                  children: [
+                                    Text(
+                                      data['current']['condition']['text'],
+                                      style: ConditionWeatherStyle(),
+                                    ),
+                                    SizedBox(width: 15),
+                                    Text(
+                                      data['current']['temp_c'].toString() +
+                                          "°C",
+                                      style: ConditionWeatherStyle(),
+                                    ),
+                                    SizedBox(width: 15),
+                                    Text(
+                                      "UV : " +
+                                          data['current']['uv'].toString(),
+                                      style: ConditionWeatherStyle(),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "Last Updated: " +
+                                      data['current']['last_updated'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 13,
+                                    color: Colors.black45,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+            Text("Reminder", style: SubHeadingStyle()),
+            SizedBox(height: 10),
             Obx(() => (projectC.tasksDueToday.length != 0)
                 ? Container(
                     height: 150,
@@ -142,7 +232,7 @@ class HomeView extends GetView<HomeController> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // projectC.addTaskDueToday();
+          print(WeatherProvider().fetchWeather("Jatinangor"));
         },
         child: Icon(Icons.add),
       ),
